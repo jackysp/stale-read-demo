@@ -7,7 +7,7 @@ server_configs:
   tidb:
     tikv-client.copr-cache.capacity-mb: 0.0
   pd:
-    replication.location-labels: ["az"]
+    replication.location-labels: ["zone"]
   tikv:
     coprocessor.region-split-keys: 2
 pd_servers:
@@ -17,23 +17,23 @@ pd_servers:
 tidb_servers:
   - host: 10.148.0.15
     config:
-      labels: {az: az1}
+      labels: {zone: az1}
   - host: 10.148.0.16
     config:
-      labels: {az: az2}
+      labels: {zone: az2}
   - host: 10.148.0.17
     config:
-      labels: {az: az3}
+      labels: {zone: az3}
 tikv_servers:
   - host: 10.148.0.15
     config:
-      server.labels: {az: az1}
+      server.labels: {zone: az1}
   - host: 10.148.0.16
     config:
-      server.labels: {az: az2}
+      server.labels: {zone: az2}
   - host: 10.148.0.17
     config:
-      server.labels: {az: az3}
+      server.labels: {zone: az3}
 monitoring_servers:
   - host: 10.148.0.5
 grafana_servers:
