@@ -1,0 +1,40 @@
+global:
+  user: "tidb"
+  ssh_port: 22
+  deploy_dir: "/tidb-deploy"
+  data_dir: "/tidb-data"
+server_configs:
+  tidb:
+    tikv-client.copr-cache.capacity-mb: 0.0
+  pd:
+    replication.location-labels: ["az"]
+  tikv:
+    coprocessor.region-split-keys: 2
+pd_servers:
+  - host: 10.148.0.15
+  - host: 10.148.0.16
+  - host: 10.148.0.17
+tidb_servers:
+  - host: 10.148.0.15
+    config:
+      labels: {az: az1}
+  - host: 10.148.0.16
+    config:
+      labels: {az: az2}
+  - host: 10.148.0.17
+    config:
+      labels: {az: az3}
+tikv_servers:
+  - host: 10.148.0.15
+    config:
+      server.labels: {az: az1}
+  - host: 10.148.0.16
+    config:
+      server.labels: {az: az2}
+  - host: 10.148.0.17
+    config:
+      server.labels: {az: az3}
+monitoring_servers:
+  - host: 10.148.0.5
+grafana_servers:
+  - host: 10.148.0.5
