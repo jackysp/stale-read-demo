@@ -35,8 +35,7 @@ Use the Go program to drive a fixed, sequential read workload against all TiDB r
 go run main.go -staleness=<seconds>
 ```
 - `-staleness=0` (default) reads at leader
-- positive value reads from followers up to that staleness
-- negative value forces leader reads
+- `-staleness=-600` reads at closest replica, allowing up to 10 minutes of staleness
 
 Check TPS and total operations in the log output.
 
@@ -48,6 +47,6 @@ Check TPS and total operations in the log output.
 
 ## Test Results
 
-The following picture shows the test results when a network block is injected on 10.148.0.17 for different durations:
+The following picture shows the test results when a network block is injected on 10.148.0.17 for different durations with `-staleness=-600`:
 
 ![Network Block Test Results](QPS.png)
