@@ -19,3 +19,6 @@ tiup cluster destroy ${CLUSTER_NAME} -y || true
 tiup cluster deploy ${CLUSTER_NAME} ${TIDB_VERSION} -y ./${TOPOLOGY_FILE}
 
 tiup cluster start ${CLUSTER_NAME}
+
+# Configure TiDB to read from closest replicas
+mysql -h 10.148.0.15 -P 4000 -u root -e "SET GLOBAL tidb_replica_read='closest-replicas';"

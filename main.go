@@ -54,19 +54,15 @@ func main() {
         }
         // Insert sample data
         log.Println("Inserting sample data...")
-        stmt, err := db.Prepare("INSERT INTO users(id, name, age) VALUES(?, ?, ?)")
-        if err != nil {
-            log.Fatalf("failed to prepare insert statement: %v", err)
-        }
         for i := 0; i < 10000; i++ {
             id := i + 1
             name := fmt.Sprintf("user_%d", i)
             age := rand.Intn(100)
-            if _, err := stmt.Exec(id, name, age); err != nil {
-                log.Fatalf("failed to insert row: %v", err)
+            sqlStr := fmt.Sprintf("INSERT INTO users(id, name, age) VALUES(%d, '%s', %d)", id, name, age)
+            if _, err := db.Exec(sqlStr); err != nil {
+                log.Fatalf("failed to insert row: %v (sql: %s)", err, sqlStr)
             }
         }
-        stmt.Close()
         log.Println("Data insertion complete.")
     } else {
         log.Println("10000 rows exist, skipping data load")
@@ -103,9 +99,13 @@ func main() {
                 }
             }
 
+            // Fixed sequential workload across sessions
+            counter := 0
             for time.Now().Before(endTime) {
-                id := rand.Intn(10000) + 1
-                rows, err := conn.Query("SELECT id, name, age FROM users WHERE id = ?", id)
+                id := (counter % 10000) + 1
+                counter++
+                query := fmt.Sprintf("SELECT id, name, age FROM users WHERE id = %d", id)
+                rows, err := conn.Query(query)
                 if err != nil {
                     log.Printf("query error on %s: %v", endpoint, err)
                     continue
